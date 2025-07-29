@@ -62,7 +62,7 @@ A simple API-based service booking system built with Laravel, allowing customers
 - composer require laravel/sanctum
 - php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 
-## Install Laravel Swagger Api
+## Install Swagger Api
 - composer require darkaonline/l5-swagger
 - php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
 - php artisan l5-swagger:generate
