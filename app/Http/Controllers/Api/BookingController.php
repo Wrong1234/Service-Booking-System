@@ -12,7 +12,7 @@ class BookingController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/bookings",
+     *     path="/api/admin/bookings",
      *     summary="Get user's bookings",
      *     tags={"Bookings"},
      *     security={{"bearerAuth":{}}},
@@ -28,8 +28,29 @@ class BookingController extends Controller
      */
     public function index(Request $request)
     {
-        $bookings = $request->user()->bookings()->with(['service'])->get();
+        $bookings = Booking::all();
         return BookingResource::collection($bookings);
+    }
+
+      /**
+     * @OA\Get(
+     *     path="/api/bookings",
+     *     summary="List logged-in user's bookings",
+     *     tags={"Bookings"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List logged-in user's bookings",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/Booking")
+     *         )
+     *     )
+     * )
+     */
+    public function userAllBooking(Request $request){
+         $bookings = $request->user()->bookings;
+         return BookingResource::collection($bookings);
     }
 
     /**
@@ -78,39 +99,5 @@ class BookingController extends Controller
             'message' => 'Booking created successfully',
             'booking' => new BookingResource($booking)
         ], 201);
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/api/bookings/{id}",
-     *     summary="Get a specific booking",
-     *     tags={"Bookings"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer", example=1)
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Booking details",
-     *         @OA\JsonContent(ref="#/components/schemas/Booking")
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Booking not found"
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Unauthorized - Can only view own bookings"
-     *     )
-     * )
-     */
-    public function show(Booking $booking)
-    {
-        $this->authorize('view', $booking);
-        
-        return new BookingResource($booking->load(['service', 'user']));
     }
 }

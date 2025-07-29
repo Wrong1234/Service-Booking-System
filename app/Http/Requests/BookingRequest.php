@@ -22,11 +22,4 @@ class BookingRequest extends FormRequest
             'booking_date' => 'required|date|after:today',
         ];
     }
-
-    // public function messages()
-    // {
-    //     return [
-    //         'booking_date.after' => 'Booking date must be in the future.',
-    //     ];
-    // }
 }

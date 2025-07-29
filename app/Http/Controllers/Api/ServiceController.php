@@ -34,7 +34,7 @@ class ServiceController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/services",
+     *     path="/api/services/store",
      *     summary="Create a new service (Admin only)",
      *     tags={"Services"},
      *     security={{"bearerAuth":{}}},
@@ -66,6 +66,7 @@ class ServiceController extends Controller
      */
     public function store(ServiceRequest $request)
     {
+        
         $service = Service::create($request->validated());
         
         return response()->json([
@@ -76,12 +77,12 @@ class ServiceController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/services/{id}",
+     *     path="/api/services/{service}",
      *     summary="Get a specific service",
      *     tags={"Services"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="service",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer", example=1)
@@ -104,12 +105,12 @@ class ServiceController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/services/{id}",
+     *     path="/api/services/{service}",
      *     summary="Update a service (Admin only)",
      *     tags={"Services"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="service",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer", example=1)
@@ -145,12 +146,12 @@ class ServiceController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/services/{id}",
+     *     path="/api/services/{service}",
      *     summary="Delete a service (Admin only)",
      *     tags={"Services"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="service",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer", example=1)

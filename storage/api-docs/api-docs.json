@@ -3,16 +3,15 @@
     "info": {
         "title": "Service Booking System API",
         "description": "API documentation for the Service Booking System",
+        "contact": {
+            "email": "admin@gmail.com"
+        },
         "version": "1.0.0"
     },
     "servers": [
         {
             "url": "http://localhost:8000",
             "description": "Local Development Server"
-        },
-        {
-            "url": "https://your-production-domain.com",
-            "description": "Production Server"
         },
         {
             "url": ""
@@ -40,7 +39,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/register": {
@@ -199,13 +203,13 @@
                 }
             }
         },
-        "/api/logout": {
+        "/api/users/logout": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Logout user",
-                "operationId": "ad65cbbd4e9f201619eae184a5961a98",
+                "operationId": "38f566c49db88445422b0d2573504147",
                 "responses": {
                     "200": {
                         "description": "Logout successful",
@@ -231,16 +235,45 @@
                 ]
             }
         },
-        "/api/bookings": {
+        "/api/admin/bookings": {
             "get": {
                 "tags": [
                     "Bookings"
                 ],
                 "summary": "Get user's bookings",
-                "operationId": "4535e967ef15bc76dadf1efa40192f0d",
+                "operationId": "5a0138e5551fc2326a256391da5ce56c",
                 "responses": {
                     "200": {
                         "description": "List of user bookings",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Booking"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bookings": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "List logged-in user's bookings",
+                "operationId": "ace408c2e9b9b1579aea5e5cf60bc287",
+                "responses": {
+                    "200": {
+                        "description": "List logged-in user's bookings",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -333,49 +366,6 @@
                 ]
             }
         },
-        "/api/bookings/{id}": {
-            "get": {
-                "tags": [
-                    "Bookings"
-                ],
-                "summary": "Get a specific booking",
-                "operationId": "c383a28985575aa1a16f783b2f762554",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Booking details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Booking"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Booking not found"
-                    },
-                    "403": {
-                        "description": "Unauthorized - Can only view own bookings"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/services": {
             "get": {
                 "tags": [
@@ -403,13 +393,15 @@
                         "bearerAuth": []
                     }
                 ]
-            },
+            }
+        },
+        "/api/services/store": {
             "post": {
                 "tags": [
                     "Services"
                 ],
                 "summary": "Create a new service (Admin only)",
-                "operationId": "0634f2b3ac65bd2815f4b6459f0db97c",
+                "operationId": "647669501b52842213480cda7028afe9",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -487,16 +479,16 @@
                 ]
             }
         },
-        "/api/services/{id}": {
+        "/api/services/{service}": {
             "get": {
                 "tags": [
                     "Services"
                 ],
                 "summary": "Get a specific service",
-                "operationId": "dce5b306a141bdec91eff8a15534d7d7",
+                "operationId": "eb52a4d27404ff87d39c39117efd1782",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "service",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -531,10 +523,10 @@
                     "Services"
                 ],
                 "summary": "Update a service (Admin only)",
-                "operationId": "14e625e6fca9956d1143de1f41a8a228",
+                "operationId": "3a9545bd0acf658bb3b26cbc87029665",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "service",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -608,10 +600,10 @@
                     "Services"
                 ],
                 "summary": "Delete a service (Admin only)",
-                "operationId": "9f75ff1ee1d79f882f516173057387ec",
+                "operationId": "a700b2ae0c8b0e6ccf4812c2bba02e97",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "service",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -759,6 +751,16 @@
                 },
                 "type": "object"
             }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
         }
     },
     "tags": [
@@ -773,6 +775,11 @@
         {
             "name": "Services",
             "description": "Services"
+        }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
         }
     ]
 }
